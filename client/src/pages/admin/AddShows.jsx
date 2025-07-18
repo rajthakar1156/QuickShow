@@ -133,7 +133,7 @@ const AddShows = () => {
             <label className="block text-sm font-medium mb-2">Show Price</label>
             <div className="inline-flex items-center gap-2 border border-gray-600 px-3 py-2 rounded-md">
                 <p className="text-gray-400 text-sm">{currency}</p>
-                <input min={0} type="number" value={showPrice} onChange={(e) => setShowPrice(e.target.value)} placeholder="Enter show price" className="outline-none text-gray-800 bg-black" />
+                <input min={0} type="number" value={showPrice} onChange={(e) => setShowPrice(e.target.value)} placeholder="Enter show price" className="outline-none  bg-black" />
             </div>
         </div>
 
@@ -141,7 +141,7 @@ const AddShows = () => {
         <div className="mt-6">
             <label className="block text-sm font-medium mb-2">Select Date and Time</label>
             <div className="inline-flex gap-5 border border-gray-600 p-1 pl-3 rounded-lg">
-                <input type="datetime-local" value={dateTimeInput} onChange={(e) => setDateTimeInput(e.target.value)} className="outline-none rounded-md text-gray-800 bg-black" />
+                <input type="datetime-local" value={dateTimeInput} onChange={(e) => setDateTimeInput(e.target.value)} className="outline-none rounded-md bg-black" />
                 <button onClick={handleDateTimeAdd} className="bg-red-600/80 text-white px-3 py-2 text-sm rounded-lg hover:bg-red-600 cursor-pointer" >
                     Add Time
                 </button>
