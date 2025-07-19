@@ -1,23 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { dummyBookingData } from "../assets/assets";
 import BlurCircle from "../components/BlurCircle";
 import timeFormat from "../lib/timeFormat";
 import dateFormat from "../lib/dateFormat";
 import Loading from "../components/Loading";
+import { useAppContext } from '../context/AppContext'
+import { Link } from 'react-router-dom'
+
 const MyBooking = () => {
   const currency = import.meta.env.VITE_CURRENCY;
+  const { axios, getToken, user, image_base_url} = useAppContext()
 
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getMyBookings = async () => {
-    setBookings(dummyBookingData);
-    setIsLoading(false);
-  };
+  const getMyBookings = async () =>{
+    try {
+      const {data} = await axios.get('/api/user/bookings', {
+        headers: { Authorization: `Bearer ${await getToken()}` }
+      })
+        if (data.success) {
+          setBookings(data.bookings)
+        }
 
-  useEffect(() => {
-    getMyBookings();
-  }, []);
+    } catch (error) {
+      console.log(error)
+    }
+    setIsLoading(false)
+  }
+
+  useEffect(()=>{
+    if(user){
+      getMyBookings()
+    }
+    
+  },[user])
 
   return isLoading ? (
     <Loading /> // Render Loading component when isLoading is true
@@ -36,7 +52,7 @@ const MyBooking = () => {
         >
           <div className="flex flex-col md:flex-row">
             <img
-              src={item.show.movie.poster_path}
+              src={image_base_url+item.show.movie.poster_path}
               alt="notfound"
               className="md:max-w-44 
       aspect-video h-auto object-cover object-bottom rounded"
@@ -59,12 +75,7 @@ const MyBooking = () => {
                 {item.amount}
               </p>
               {!item.isPaid && (
-                <button
-                  className="bg-red-600 px-4 py-1.5 mb-3 text-sm rounded-full
-         font-medium cursor-pointer"
-                >
-                  Pay Now
-                </button>
+                <Link to={item.paymentLink} className='bg-red-600 px-4 py-1.5 mb-3 text-sm rounded-full font-medium cursor-pointer'>Pay Now</Link>
               )}
             </div>
             <div className="text-sm">
